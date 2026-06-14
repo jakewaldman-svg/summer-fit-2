@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SummerFit">
+<title>SummerFit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#090910;--surface:#101018;--surface2:#161622;--border:#1f1f30;--border2:#2a2a3f;
+  --accent:#E8FF47;--accent-dim:rgba(232,255,71,0.12);--accent-dimmer:rgba(232,255,71,0.06);
+  --danger:#FF4747;--danger-dim:rgba(255,71,71,0.12);--warn:#FF9800;--warn-dim:rgba(255,152,0,0.12);
+  --muted:#555570;--muted2:#3a3a55;--text:#e8e8f0;--text2:#9090aa;--text3:#606078;
+  --green:#4CAF50;--green-dim:rgba(76,175,80,0.12);--blue:#4FC3F7;--blue-dim:rgba(79,195,247,0.1);--radius:10px;--radius-sm:6px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;-webkit-text-size-adjust:100%;}
+.app{min-height:100vh;max-width:600px;margin:0 auto;padding-bottom:100px;}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100;}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.5px;color:var(--accent);}
+.nav-logo span{color:var(--text3);font-weight:400;}
+.nav-tabs{display:flex;gap:4px;}
+.tab-btn{background:none;border:none;color:var(--text3);font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:6px 10px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;}
+.tab-btn.active{background:var(--accent-dim);color:var(--accent);}
+.tab-btn:hover:not(.active){color:var(--text);background:var(--surface);}
+.stage-banner{margin:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.stage-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.stage-text{flex:1;}
+.stage-label{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);}
+.stage-name{font-size:13px;font-weight:500;color:var(--text);}
+.stage-week{font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--text3);}
+/* NEXT DAY HERO */
+.next-day-hero{margin:12px 16px;background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius);padding:16px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.next-day-hero:active{filter:brightness(0.95);}
+.ndh-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+.ndh-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--text);}
+.ndh-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.ndh-btn{margin-top:12px;background:var(--accent);color:#090910;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:var(--radius-sm);padding:10px 18px;cursor:pointer;display:inline-block;}
+.ndh-rest{margin:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;}
+.ndh-rest-icon{font-size:28px;margin-bottom:6px;}
+.ndh-rest-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--text);}
+.ndh-rest-sub{font-size:12px;color:var(--text3);margin-top:3px;}
+/* DASH */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px;}
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.dash-label{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);margin-bottom:6px;}
+.dash-value{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--text);line-height:1;}
+.dash-value.accent{color:var(--accent);}
+.dash-sub{font-size:12px;color:var(--text3);margin-top:4px;}
+.day-list{padding:0 16px;display:flex;flex-direction:column;gap:8px;}
+.day-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:12px;-webkit-tap-highlight-color:transparent;}
+.day-card:active{background:var(--surface2);}
+.day-card.done-card{border-color:var(--green);opacity:0.7;}
+.day-num{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);}
+.day-name{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--text);}
+.day-sub{font-size:12px;color:var(--text3);}
+.day-ex-count{margin-left:auto;font-size:11px;color:var(--text3);white-space:nowrap;}
+/* WORKOUT */
+.workout-header{padding:16px 16px 10px;}
+.back-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;margin-bottom:8px;padding:0;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
+.workout-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;}
+.workout-subtitle{color:var(--text3);font-size:13px;margin-top:2px;}
+.workout-progress{height:3px;background:var(--border);border-radius:2px;margin:12px 16px 0;}
+.workout-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s;}
+.prog-label{padding:6px 16px;font-size:11px;color:var(--text3);}
+/* EXERCISE CARDS */
+.ex-card{margin:10px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.ex-header{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.ex-header:active{background:var(--surface2);}
+.ex-num{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--text3);min-width:18px;}
+.ex-title{flex:1;}
+.ex-name{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--text);}
+.ex-meta{font-size:11px;color:var(--text3);margin-top:1px;}
+.ex-status{display:flex;align-items:center;gap:6px;}
+.ex-done-badge{font-size:10px;font-weight:600;background:var(--green-dim);color:var(--green);border-radius:4px;padding:2px 7px;}
+.ex-prog-badge{font-size:10px;font-weight:600;background:var(--accent-dim);color:var(--accent);border-radius:4px;padding:2px 7px;}
+.ex-chevron{color:var(--text3);font-size:10px;transition:transform 0.2s;}
+.ex-chevron.open{transform:rotate(180deg);}
+.ex-body{border-top:1px solid var(--border);}
+.set-header{display:grid;grid-template-columns:28px 1fr 1fr 64px 28px;gap:6px;padding:8px 14px 4px;}
+.set-col-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);text-align:center;}
+.set-col-label:first-child{text-align:left;}
+.set-row{display:grid;grid-template-columns:28px 1fr 1fr 64px 28px;gap:6px;padding:4px 14px;align-items:center;transition:background 0.2s;}
+.set-row.s-done{background:var(--green-dim);}
+.set-row.s-pain{background:var(--danger-dim);}
+.set-num{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--text3);}
+.set-input{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 4px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--text);width:100%;text-align:center;outline:none;transition:border 0.15s;-webkit-appearance:none;}
+.set-input:focus{border-color:var(--accent);}
+.set-input::placeholder{color:var(--muted);font-weight:400;font-size:11px;}
+.set-rpe{display:flex;gap:3px;align-items:center;}
+.rpe-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:4px 2px;font-size:10px;font-weight:600;color:var(--text3);cursor:pointer;flex:1;text-align:center;-webkit-tap-highlight-color:transparent;}
+.rpe-btn.sel{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.pain-btn{background:none;border:none;font-size:16px;cursor:pointer;opacity:0.35;transition:opacity 0.15s;padding:0;-webkit-tap-highlight-color:transparent;}
+.pain-btn.on{opacity:1;}
+.ex-actions{padding:8px 14px 10px;display:flex;gap:8px;}
+.form-toggle{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 10px;cursor:pointer;font-size:12px;color:var(--text3);flex:1;-webkit-tap-highlight-color:transparent;}
+.form-toggle.good{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.form-toggle.bad{background:var(--danger-dim);border-color:var(--danger);color:var(--danger);}
+.safety-warn{margin:6px 14px;background:var(--warn-dim);border:1px solid var(--warn);border-radius:var(--radius-sm);padding:8px 10px;font-size:11px;color:var(--warn);}
+.prog-rec{margin:6px 14px;background:var(--accent-dim);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:8px 10px;font-size:11px;color:var(--accent);font-weight:500;}
+.pain-warn{margin:6px 14px;background:var(--danger-dim);border:1px solid var(--danger);border-radius:var(--radius-sm);padding:8px 10px;font-size:11px;color:var(--danger);}
+.ex-info{padding:0 14px 12px;}
+.info-section{margin-bottom:10px;}
+.info-label{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);margin-bottom:4px;}
+.cue-item{font-size:12px;color:var(--text2);padding-left:12px;position:relative;margin-bottom:2px;}
+.cue-item::before{content:"→";position:absolute;left:0;color:var(--accent);font-size:10px;top:1px;}
+.mistake-item{font-size:12px;color:var(--text2);padding-left:12px;position:relative;margin-bottom:2px;}
+.mistake-item::before{content:"✕";position:absolute;left:0;color:var(--danger);font-size:10px;top:1px;}
+.video-link{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;color:var(--text2);text-decoration:none;}
+.core-options{padding:6px 14px 10px;}
+.core-cat-label{font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);margin-bottom:5px;margin-top:8px;}
+.core-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;}
+.core-chip{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:5px 10px;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.core-chip.sel{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+/* CARDIO LOG */
+.cardio-card{margin:10px 16px 0;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;}
+.cardio-header{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.cardio-header:active{background:var(--surface2);}
+.cardio-icon{font-size:18px;}
+.cardio-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--blue);}
+.cardio-desc{font-size:12px;color:var(--text2);margin-top:2px;}
+.cardio-logged{margin-left:auto;font-size:10px;font-weight:600;background:var(--blue-dim);color:var(--blue);border-radius:4px;padding:2px 7px;}
+.cardio-body{border-top:1px solid var(--border);padding:12px 14px;}
+.cardio-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.cardio-field label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);display:block;margin-bottom:4px;}
+.cardio-input{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:7px 8px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--text);width:100%;text-align:center;outline:none;-webkit-appearance:none;}
+.cardio-input:focus{border-color:var(--blue);}
+.cardio-input::placeholder{color:var(--muted);font-weight:400;font-size:11px;}
+.cardio-types{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.cardio-type-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:5px 10px;font-size:11px;color:var(--text3);cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.cardio-type-btn.sel{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+.cardio-log-btn{width:100%;background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;border-radius:var(--radius-sm);padding:9px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.cardio-log-btn:active{filter:brightness(1.2);}
+/* NOTES */
+.notes-section{margin:16px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.notes-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;}
+.note-field{margin-bottom:10px;}
+.note-label{font-size:11px;font-weight:600;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;}
+.note-input{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:7px 10px;font-size:13px;color:var(--text);width:100%;outline:none;font-family:'Inter',sans-serif;transition:border 0.15s;resize:none;-webkit-appearance:none;}
+.note-input:focus{border-color:var(--accent);}
+.note-input::placeholder{color:var(--muted);}
+.complete-section{margin:16px 16px 0;}
+.complete-btn{width:100%;background:var(--accent);color:#090910;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:var(--radius);padding:16px;cursor:pointer;letter-spacing:0.3px;-webkit-tap-highlight-color:transparent;}
+.complete-btn:active{filter:brightness(0.9);}
+.complete-btn.saved{background:var(--green);color:#fff;}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);padding:16px 16px 8px;}
+.pr-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:12px;margin:0 16px 6px;}
+.pr-val{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--accent);}
+.pr-val.empty{color:var(--text3);}
+.history-list{padding:0 16px;display:flex;flex-direction:column;gap:8px;}
+.history-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+.history-date{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);margin-bottom:4px;}
+.history-name{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--text);}
+.history-chips{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;}
+.chip{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:3px 8px;font-size:11px;color:var(--text2);}
+.chip.cardio-chip{border-color:var(--blue);color:var(--blue);background:var(--blue-dim);}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin:0 16px 10px;}
+.chart-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;}
+.chart-area{height:80px;display:flex;align-items:flex-end;gap:3px;}
+.chart-bar-wrap{flex:1;height:100%;display:flex;align-items:flex-end;position:relative;}
+.chart-bar{width:100%;background:var(--accent-dim);border-radius:3px 3px 0 0;border:1px solid rgba(232,255,71,0.3);border-bottom:none;min-height:4px;}
+.chart-bar.blue-bar{background:var(--blue-dim);border-color:rgba(79,195,247,0.3);}
+.chart-empty{color:var(--text3);font-size:12px;text-align:center;padding:20px;}
+.chart-stat{margin-top:6px;font-size:11px;color:var(--text3);}
+.settings-section{padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.setting-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.setting-row{display:flex;align-items:center;gap:12px;}
+.setting-name{font-size:13px;font-weight:500;color:var(--text);}
+.setting-desc{font-size:11px;color:var(--text3);margin-top:2px;}
+.num-ctrl{display:flex;align-items:center;gap:8px;}
+.num-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);width:32px;height:32px;font-size:18px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;-webkit-tap-highlight-color:transparent;}
+.num-btn:active{border-color:var(--accent);color:var(--accent);}
+.num-val{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--accent);min-width:28px;text-align:center;}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text3);font-size:13px;}
+.empty-icon{font-size:36px;margin-bottom:10px;}
+.prog-info{font-size:12px;color:var(--text3);line-height:1.8;margin-top:8px;}
+.prog-info b{color:var(--text2);}
+.phase-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.phase-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+/* CARDIO STATS */
+.cardio-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 16px;margin-bottom:10px;}
+.cardio-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.cardio-stat-label{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--blue);margin-bottom:4px;}
+.cardio-stat-val{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--text);}
+.cardio-stat-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'sf_v2';
+let STATE = load();
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState(); }
+  catch { return defaultState(); }
+}
+function defaultState() {
+  return {
+    tab:'workout', activeDay:null, currentWeek:1,
+    logs:{},          // workout sessions
+    cardioLogs:[],    // [{date, type, minutes, miles, day}]
+    sessionData:{}, sessionNotes:{}, expandedEx:{}, selectedCores:{},
+    expandedCardio:{},
+    lastCompletedDayIndex: null  // 0–3 index into DAY_ORDER
+  };
+}
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE)); }
+
+// ── PROGRAM ────────────────────────────────────────────────────────────────
+const DAY_ORDER = ["Day 1","Day 2","Day 3","Day 4"];
+
+const PROGRAM = {
+  "Day 1":{ label:"Upper A", subtitle:"Chest Emphasis",
+    cardioSuggestion:"Incline walk: 20–35 min, 3.0 mph, 8–12% incline",
+    exercises:[
+      {id:"bench",name:"Barbell Bench Press",sets:4,repRange:[6,8],type:"barbell",safetyFlag:"shoulder",
+        cues:["Retract and depress scapula before unracking","Touch bar to lower chest, slight flare at bottom","Drive feet into floor","Bar path slightly diagonal — not straight down"],
+        mistakes:["Bouncing bar off chest","Flared elbows too wide","Butt lifting off bench"],video:"barbell bench press form Jeff Nippard"},
+      {id:"incline_db_press",name:"Incline Dumbbell Press",sets:3,repRange:[8,12],type:"dumbbell",safetyFlag:"shoulder",
+        cues:["30–45° incline","Neutral grip at bottom, slight pronation at top","Control the eccentric 2–3 sec"],
+        mistakes:["Incline too steep (turns into shoulder press)","Dumbbells drifting too wide"],video:"incline dumbbell press hypertrophy Renaissance Periodization"},
+      {id:"pullups_a",name:"Strict Overhand Pullups",sets:4,repRange:[6,8],type:"bodyweight",safetyFlag:null,
+        cues:["Dead hang start","Depress scapula first, then pull elbows to hips","Chin clearly over bar","Full dead hang each rep"],
+        mistakes:["Kipping","Partial range of motion","Shrugging at bottom"],video:"strict pullup form Alan Thrall"},
+      {id:"chest_row",name:"Chest-Supported Row",sets:3,repRange:[8,12],type:"dumbbell",safetyFlag:null,
+        cues:["Chest flat on pad — no cheating","Drive elbows back, not up","Squeeze at top for 1 sec","Full stretch at bottom"],
+        mistakes:["Heaving the weight","Lifting chest off pad"],video:"chest supported row form Stronger By Science"},
+      {id:"cable_fly",name:"High-to-Low Cable Fly",sets:3,repRange:[12,15],type:"cable",safetyFlag:"shoulder",
+        cues:["Cables set high","Slight forward lean","Soft elbow bend throughout","Hands meet at hip level"],
+        mistakes:["Bending elbows too much (turns into press)","Using too much weight"],video:"cable fly chest hypertrophy Renaissance Periodization"},
+      {id:"lat_raise_a",name:"Dumbbell Lateral Raise",sets:4,repRange:[12,15],type:"dumbbell",safetyFlag:"shoulder",
+        cues:["Slight forward lean","Lead with elbows, not wrists","Stop at shoulder height","Lower under control"],
+        mistakes:["Swinging the weight","Shrugging at top","Going too heavy"],video:"lateral raise proper form Jeff Nippard"},
+      {id:"tricep_pushdown",name:"Rope Triceps Pushdown",sets:3,repRange:[10,15],type:"cable",safetyFlag:null,
+        cues:["Elbows pinned to sides","Spread rope at bottom","Full extension","Controlled return"],
+        mistakes:["Elbows flaring out","Leaning forward excessively"],video:"rope triceps pushdown form Athlean-X"}
+    ]},
+  "Day 2":{ label:"Lower A", subtitle:"Squat Focus",
+    cardioSuggestion:"Zone 2 jog/walk: 20–30 min easy (avoid day before heavy squats)",
+    exercises:[
+      {id:"squat",name:"Back Squat",sets:4,repRange:[5,8],type:"barbell",safetyFlag:"lower-back",
+        cues:["Brace hard before descent","Knees track over toes","Hip crease below parallel","Stand tall — don't good-morning it"],
+        mistakes:["Butt wink","Caving knees","Forward lean on ascent","Heels rising"],video:"back squat form Squat University"},
+      {id:"rdl",name:"Romanian Deadlift",sets:3,repRange:[8,10],type:"barbell",safetyFlag:"lower-back",
+        cues:["Push hips back, not down","Bar stays close — drags down shins/thighs","Feel hamstring stretch at bottom","Squeeze glutes at lockout"],
+        mistakes:["Rounding lower back","Bending knees too much","Bar drifting away from body"],video:"Romanian deadlift form Alan Thrall"},
+      {id:"lunges",name:"Walking Lunges",sets:3,repRange:[10,10],type:"dumbbell",safetyFlag:null,
+        cues:["Long stride","Front shin vertical","Back knee hovers 1 inch off floor","Stay tall — no torso lean"],
+        mistakes:["Short stride (knee shoots past toes)","Looking down"],video:"walking lunge form Jeff Nippard"},
+      {id:"leg_curl",name:"Leg Curl",sets:3,repRange:[12,12],type:"machine",safetyFlag:null,
+        cues:["Full range — full extension to full curl","Control the eccentric","Hips stay flat on pad"],
+        mistakes:["Partial reps","Hips rising off pad"],video:"leg curl hamstring hypertrophy Renaissance Periodization"},
+      {id:"calf_raise_a",name:"Standing Calf Raise",sets:4,repRange:[12,15],type:"machine",safetyFlag:null,
+        cues:["Full stretch at bottom","Pause at top","Slow eccentric (3 sec)"],
+        mistakes:["Bouncing at bottom","Partial range"],video:"calf raise form Jeff Nippard"},
+      {id:"core_a",name:"Core Block",sets:3,repRange:[1,1],type:"core",safetyFlag:null,isCore:true,
+        cues:["Rotate: hollow hold, dead bug, plank, Pallof press, cable crunch","Rest 60 sec between","Quality over quantity"],
+        mistakes:["Rushing through","Holding breath"],video:"core training anti-extension Stronger By Science"}
+    ]},
+  "Day 3":{ label:"Upper B", subtitle:"Shoulders / Lats",
+    cardioSuggestion:"Incline walk: 20–35 min, 3.0 mph, 8–12% incline",
+    exercises:[
+      {id:"ohp",name:"Standing Overhead Press",sets:4,repRange:[6,8],type:"barbell",safetyFlag:"shoulder",
+        cues:["Bar rests on front delts","Brace hard — full body tension","Bar travels in slight arc around face","Lock out hard at top"],
+        mistakes:["Excessive layback","Elbows too wide","Bar drifting forward"],video:"overhead press form Alan Thrall"},
+      {id:"pullups_b",name:"Strict Overhand Pullups",sets:4,repRange:[6,8],type:"bodyweight",safetyFlag:null,
+        cues:["Dead hang start","Depress scapula first","Full ROM every rep"],
+        mistakes:["Kipping","Partial range"],video:"strict pullup lats Renaissance Periodization"},
+      {id:"incline_bench_b",name:"Incline Bench Press",sets:3,repRange:[8,10],type:"barbell",safetyFlag:"shoulder",
+        cues:["30–45° angle","Flare elbows slightly less than flat bench","Touch upper chest"],
+        mistakes:["Too steep an angle","Elbows too flared"],video:"incline bench press upper chest Jeff Nippard"},
+      {id:"cable_row",name:"Seated Cable Row",sets:3,repRange:[10,12],type:"cable",safetyFlag:null,
+        cues:["Neutral spine — slight lean forward at stretch","Drive elbows back","Squeeze rhomboids at lockout","Full stretch at front"],
+        mistakes:["Rounding lower back","Using momentum"],video:"seated cable row back thickness Stronger By Science"},
+      {id:"lat_raise_b",name:"Dumbbell Lateral Raise",sets:4,repRange:[15,15],type:"dumbbell",safetyFlag:"shoulder",
+        cues:["Go lighter — second shoulder session","Lead with elbows","Stop at shoulder height"],
+        mistakes:["Going too heavy after OHP","Shrugging"],video:"lateral raise form Jeff Nippard"},
+      {id:"rear_delt_fly",name:"Rear Delt Fly",sets:3,repRange:[15,15],type:"dumbbell",safetyFlag:null,
+        cues:["Hinged forward 45–90°","Soft elbow bend","Lead with elbows, not hands","Control down"],
+        mistakes:["Too upright","Too heavy"],video:"rear delt fly form Jeff Nippard"},
+      {id:"barbell_curl",name:"Barbell Curl",sets:3,repRange:[8,12],type:"barbell",safetyFlag:null,
+        cues:["Elbows pinned to sides","Full extension at bottom","Supinate at top","Don't swing"],
+        mistakes:["Swinging","Partial range at bottom"],video:"barbell curl bicep form Jeff Nippard"},
+      {id:"incline_curl",name:"Incline Dumbbell Curl",sets:2,repRange:[12,12],type:"dumbbell",safetyFlag:null,
+        cues:["Bench at 45–60°","Arms hang behind body — maximum stretch","Full supination at top"],
+        mistakes:["Bench too upright","Not getting the stretch"],video:"incline dumbbell curl long head bicep Renaissance Periodization"}
+    ]},
+  "Day 4":{ label:"Lower B", subtitle:"Deadlift Focus",
+    cardioSuggestion:"Zone 2 walk/jog: 20 min moderate (avoid hard running before next lower day)",
+    exercises:[
+      {id:"trap_deadlift",name:"Trap Bar Deadlift",sets:4,repRange:[5,5],type:"barbell",safetyFlag:"lower-back",
+        cues:["Hip hinge — push floor away","Neutral spine throughout","Bar over mid-foot","Drive hips through at lockout"],
+        mistakes:["Rounding upper back","Jerking bar off floor","Hyperextending at lockout"],video:"trap bar deadlift form Alan Thrall"},
+      {id:"front_squat",name:"Front Squat",sets:3,repRange:[6,10],type:"barbell",safetyFlag:"lower-back",
+        cues:["Elbows high throughout","More upright torso than back squat","Knees out","Deep as mobility allows"],
+        mistakes:["Elbows dropping","Heels rising"],video:"front squat form Squat University"},
+      {id:"bss",name:"Bulgarian Split Squat",sets:3,repRange:[10,10],type:"dumbbell",safetyFlag:null,
+        cues:["Front foot far enough forward — front shin near-vertical","Lower straight down, not forward","Drive through front heel"],
+        mistakes:["Front foot too close","Leaning far forward"],video:"Bulgarian split squat form Jeff Nippard"},
+      {id:"leg_ext",name:"Leg Extension",sets:3,repRange:[12,15],type:"machine",safetyFlag:null,
+        cues:["Full extension — pause at top","Slow eccentric (3 sec)","Both legs working evenly"],
+        mistakes:["Short range","Rocking to get weight up"],video:"leg extension quad hypertrophy Renaissance Periodization"},
+      {id:"calf_raise_b",name:"Calf Raise",sets:4,repRange:[12,15],type:"machine",safetyFlag:null,
+        cues:["Full stretch","Pause at top","Slow eccentric"],
+        mistakes:["Bouncing","Partial range"],video:"calf raise seated standing form"},
+      {id:"core_b",name:"Core Block",sets:3,repRange:[1,1],type:"core",safetyFlag:null,isCore:true,
+        cues:["Rotate: Pallof press, side plank, farmer's carry, ab wheel, hanging knee raise","Anti-rotation focus"],
+        mistakes:["Skipping core after heavy lower work"],video:"core anti-rotation Pallof press Stronger By Science"}
+    ]}
+};
+
+const STAGES = {
+  1:{label:"Re-Entry",color:"#4FC3F7",desc:"Conservative weights, 2 RIR every set"},
+  2:{label:"Build",color:"#E8FF47",desc:"Progress when top reps hit, 1 RIR"},
+  3:{label:"Push",color:"#FF9800",desc:"Leave nothing on isolation sets"},
+  4:{label:"Deload",color:"#EF5350",desc:"Reduce load 20–30%, volume cut"}
+};
+
+const CORE_ROTATIONS = {
+  "Anti-Extension":["Hollow Hold","Dead Bug","Front Plank","Ab Wheel Rollout"],
+  "Anti-Rotation":["Pallof Press","Side Plank"],
+  "Loaded / Bracing":["Farmer's Carry"],
+  "Flexion":["Cable Crunch","Hanging Knee Raise"]
+};
+
+const CARDIO_TYPES = ["Incline Walk","Zone 2 Jog","Easy Walk","Bike","Elliptical","Other"];
+
+const NOTE_PROMPTS = [
+  {key:"energy",label:"Energy today",ph:"1–10 or describe"},
+  {key:"sleep",label:"Sleep last night",ph:"Hours / quality"},
+  {key:"soreness",label:"Notable soreness",ph:"Any muscles?"},
+  {key:"jointPain",label:"Joint discomfort",ph:"None? Or where?"},
+  {key:"bestLift",label:"Best lift today",ph:"What clicked?"},
+  {key:"worstLift",label:"Worst lift today",ph:"What felt off?"},
+  {key:"nextChange",label:"Change next session",ph:"Weight, cue, setup..."}
+];
+
+const SAFETY = {
+  shoulder:"⚠ Watch for shoulder impingement — internal pinching or sharp pain = drop load and ROM immediately.",
+  "lower-back":"⚠ Monitor lower back. Sharp or radiating pain = stop the set. Reduce load, check bracing."
+};
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function getStage(w){ return w<=2?1:w<=6?2:w<=10?3:4; }
+
+function getNextDay() {
+  // Returns the next day string (e.g. "Day 2") based on last completed
+  if (STATE.lastCompletedDayIndex === null) return "Day 1";
+  const nextIdx = (STATE.lastCompletedDayIndex + 1) % 4;
+  return DAY_ORDER[nextIdx];
+}
+
+function getWeekStartMonday() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun
+  const diff = (day === 0) ? -6 : 1 - day;
+  const mon = new Date(now);
+  mon.setDate(now.getDate() + diff);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+
+function getCardioThisWeek() {
+  const weekStart = getWeekStartMonday().getTime();
+  return STATE.cardioLogs.filter(c => new Date(c.date).getTime() >= weekStart);
+}
+
+function cardioTotalMiles(logs) {
+  return logs.reduce((s,c) => s + (parseFloat(c.miles)||0), 0);
+}
+function cardioTotalMins(logs) {
+  return logs.reduce((s,c) => s + (parseInt(c.minutes)||0), 0);
+}
+
+function getProgRec(ex, sets, stage) {
+  if (!sets || sets.length < ex.sets) return null;
+  const done = sets.filter(s => s.reps !== '' && s.reps !== null && s.reps !== undefined);
+  if (done.length < ex.sets) return null;
+  const allGoodForm = done.every(s => s.formGood !== false);
+  const allHitTop = done.every(s => parseInt(s.reps) >= ex.repRange[1]);
+  if (!allHitTop || !allGoodForm) return null;
+  if (ex.type === 'bodyweight') return `Add 1 rep per set next session (target ${ex.repRange[1]+1})`;
+  if (ex.type === 'barbell') return `Add 5 lb next session`;
+  if (ex.type === 'dumbbell') return `Move up to next dumbbell pair (+5 lb)`;
+  return `Add 1–2 reps first, then bump weight by 5 lb`;
+}
+
+function getPrevSets(exId) {
+  const logs = Object.values(STATE.logs);
+  for (let i = logs.length-1; i >= 0; i--) {
+    if (logs[i].sets && logs[i].sets[exId]) return logs[i].sets[exId];
+  }
+  return null;
+}
+
+function initSets(ex) {
+  const prev = getPrevSets(ex.id);
+  return Array.from({length: ex.sets}, (_,i) => ({
+    weight: prev?.[i]?.weight ?? '',
+    reps: prev?.[i]?.reps ?? '',
+    rir: null, formGood: null, pain: false
+  }));
+}
+
+function ensureSession(day) {
+  if (!STATE.sessionData[day]) {
+    STATE.sessionData[day] = {};
+    PROGRAM[day].exercises.forEach(ex => {
+      STATE.sessionData[day][ex.id] = initSets(ex);
+    });
+  }
+  if (!STATE.expandedCardio) STATE.expandedCardio = {};
+  if (!STATE.cardioLogs) STATE.cardioLogs = [];
+}
+
+function isExDone(day, exId) {
+  const s = STATE.sessionData[day]?.[exId];
+  if (!s) return false;
+  const ex = PROGRAM[day].exercises.find(e => e.id === exId);
+  return s.filter(x => x.reps !== '' && x.reps !== null && x.reps !== undefined).length >= ex.sets;
+}
+
+function hasPain(day, exId) {
+  return STATE.sessionData[day]?.[exId]?.some(s => s.pain);
+}
+
+function countDone(day) {
+  return PROGRAM[day].exercises.filter(ex => isExDone(day, ex.id)).length;
+}
+
+// Temp cardio form state (not persisted between renders, just in memory)
+let CARDIO_FORM = {};
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function render() {
+  document.getElementById('app').innerHTML = buildApp();
+  attachEvents();
+}
+
+function buildApp() {
+  return `
+    ${buildNav()}
+    ${STATE.tab==='workout' ? (STATE.activeDay ? buildWorkout(STATE.activeDay) : buildDashboard()) : ''}
+    ${STATE.tab==='history' ? buildHistory() : ''}
+    ${STATE.tab==='progress' ? buildProgress() : ''}
+    ${STATE.tab==='settings' ? buildSettings() : ''}
+  `;
+}
+
+function buildNav() {
+  const tabs=[['workout','Lift'],['history','Log'],['progress','Gains'],['settings','Setup']];
+  return `<div class="nav">
+    <div class="nav-logo">Summer<span>Fit</span></div>
+    <div class="nav-tabs">
+      ${tabs.map(([id,l])=>`<button class="tab-btn${STATE.tab===id?' active':''}" data-tab="${id}">${l}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function buildDashboard() {
+  const w = STATE.currentWeek;
+  const stage = getStage(w);
+  const sc = STAGES[stage];
+  const nextDay = getNextDay();
+  const nextProg = PROGRAM[nextDay];
+  const sessThisWeek = Object.values(STATE.logs).filter(l=>l.week===w).length;
+  const total = Object.keys(STATE.logs).length;
+  const weekCardio = getCardioThisWeek();
+  const weekMiles = cardioTotalMiles(weekCardio).toFixed(1);
+  const weekMins = cardioTotalMins(weekCardio);
+  const allMiles = cardioTotalMiles(STATE.cardioLogs||[]).toFixed(1);
+
+  const KEY_LIFTS=[
+    {id:'bench',name:'Bench Press'},{id:'ohp',name:'OH Press'},
+    {id:'squat',name:'Back Squat'},{id:'trap_deadlift',name:'Trap Deadlift'},{id:'pullups_a',name:'Pullups'}
+  ];
+  const prMap={};
+  Object.values(STATE.logs).forEach(sess=>{
+    Object.entries(sess.sets||{}).forEach(([exId,sets])=>{
+      sets.forEach(s=>{
+        const wt=parseFloat(s.weight)||0;
+        if(wt>(prMap[exId]?.weight||0)) prMap[exId]={weight:wt,reps:s.reps};
+      });
+    });
+  });
+
+  const sessionDoneThisWeek = !!STATE.logs[`W${w}-${nextDay}`];
+
+  return `
+    <div class="stage-banner">
+      <div class="stage-dot" style="background:${sc.color}"></div>
+      <div class="stage-text">
+        <div class="stage-label">Phase ${stage}</div>
+        <div class="stage-name">${sc.label}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:1px">${sc.desc}</div>
+      </div>
+      <div class="stage-week">Wk ${w}</div>
+    </div>
+
+    ${sessionDoneThisWeek
+      ? `<div class="ndh-rest">
+          <div class="ndh-rest-icon">✅</div>
+          <div class="ndh-rest-title">All caught up!</div>
+          <div class="ndh-rest-sub">You've done ${sessThisWeek} of 4 sessions this week. Rest or pick any day below.</div>
+        </div>`
+      : `<div class="next-day-hero" data-startday="${nextDay}">
+          <div class="ndh-eyebrow">Up Next</div>
+          <div class="ndh-title">${nextDay} — ${nextProg.label}</div>
+          <div class="ndh-sub">${nextProg.subtitle} · ${nextProg.exercises.length} exercises · Week ${w}</div>
+          <div class="ndh-btn">Start Workout →</div>
+        </div>`
+    }
+
+    <div class="dash-grid">
+      <div class="dash-card"><div class="dash-label">Week</div><div class="dash-value accent">${w}</div><div class="dash-sub">of program</div></div>
+      <div class="dash-card"><div class="dash-label">Sessions</div><div class="dash-value">${sessThisWeek}<span style="font-size:14px;color:var(--text3)">/4</span></div><div class="dash-sub">this week</div></div>
+      <div class="dash-card"><div class="dash-label">Miles This Week</div><div class="dash-value" style="color:var(--blue)">${weekMiles}</div><div class="dash-sub">${weekMins} min cardio</div></div>
+      <div class="dash-card"><div class="dash-label">Total Miles</div><div class="dash-value" style="color:var(--blue)">${allMiles}</div><div class="dash-sub">all time</div></div>
+    </div>
+
+    <div class="section-title">Personal Records</div>
+    ${KEY_LIFTS.map(l=>{
+      const pr=prMap[l.id];
+      return `<div class="pr-row">
+        <div style="flex:1;font-size:12px;font-weight:600;color:var(--text)">${l.name}</div>
+        <div class="pr-val${pr?'':' empty'}">${pr?`${pr.weight} lb × ${pr.reps}`:'—'}</div>
+      </div>`;
+    }).join('')}
+
+    <div class="section-title">All Sessions</div>
+    <div class="day-list">
+      ${DAY_ORDER.map(day=>{
+        const prog=PROGRAM[day];
+        const done=!!STATE.logs[`W${w}-${day}`];
+        return `<div class="day-card${done?' done-card':''}" data-startday="${day}">
+          <div>
+            <div class="day-num">${day}</div>
+            <div class="day-name">${prog.label}</div>
+            <div class="day-sub">${prog.subtitle}</div>
+          </div>
+          <div class="day-ex-count">${done?'<span style="color:var(--green);font-size:12px">✓ Done</span>':prog.exercises.length+' exercises'}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function buildWorkout(day) {
+  ensureSession(day);
+  const prog = PROGRAM[day];
+  const total = prog.exercises.length;
+  const done = countDone(day);
+  const w = STATE.currentWeek;
+  const stage = getStage(w);
+  const cardioKey = `${day}-cardio`;
+  const cardioOpen = STATE.expandedCardio?.[cardioKey];
+  const cardioLogged = (STATE.cardioLogs||[]).filter(c=>c.sessionDay===day && c.sessionWeek===w);
+
+  return `
+    <div class="workout-header">
+      <button class="back-btn" id="backBtn">← All Days</button>
+      <div class="workout-title">${day} — ${prog.label}</div>
+      <div class="workout-subtitle">${prog.subtitle} · Week ${w} · ${STAGES[stage].label} Phase</div>
+    </div>
+    <div class="workout-progress"><div class="workout-progress-fill" style="width:${(done/total)*100}%"></div></div>
+    <div class="prog-label">${done}/${total} exercises logged</div>
+    ${prog.exercises.map((ex,i)=>buildExCard(day,ex,i,stage)).join('')}
+
+    <div class="cardio-card">
+      <div class="cardio-header" data-cardiotoggle="${cardioKey}">
+        <div class="cardio-icon">🏃</div>
+        <div style="flex:1">
+          <div class="cardio-label">Optional Cardio</div>
+          <div class="cardio-desc">${prog.cardioSuggestion}</div>
+        </div>
+        ${cardioLogged.length>0?`<div class="cardio-logged">✓ ${cardioLogged.length} logged</div>`:''}
+        <div class="ex-chevron${cardioOpen?' open':''}" style="margin-left:8px">▼</div>
+      </div>
+      ${cardioOpen ? buildCardioBody(day, w) : ''}
+    </div>
+
+    <div class="notes-section">
+      <div class="notes-title">Session Notes</div>
+      ${NOTE_PROMPTS.map(np=>`
+        <div class="note-field">
+          <div class="note-label">${np.label}</div>
+          <textarea class="note-input" rows="1" placeholder="${np.ph}" data-notekey="${np.key}" data-noteday="${day}">${STATE.sessionNotes[day]?.[np.key]||''}</textarea>
+        </div>`).join('')}
+    </div>
+    <div class="complete-section">
+      <button class="complete-btn" id="completeBtn" data-day="${day}">Complete ${day}</button>
+    </div>
+    <div style="height:20px"></div>`;
+}
+
+function buildCardioBody(day, w) {
+  const cf = CARDIO_FORM;
+  const logged = (STATE.cardioLogs||[]).filter(c=>c.sessionDay===day && c.sessionWeek===w);
+  return `<div class="cardio-body">
+    <div class="cardio-types">
+      ${CARDIO_TYPES.map(t=>`<button class="cardio-type-btn${cf.type===t?' sel':''}" data-cardiotype="${t}">${t}</button>`).join('')}
+    </div>
+    <div class="cardio-fields">
+      <div class="cardio-field">
+        <label>Minutes</label>
+        <input class="cardio-input" type="number" inputmode="numeric" placeholder="30" id="cardioMins" value="${cf.minutes||''}">
+      </div>
+      <div class="cardio-field">
+        <label>Miles</label>
+        <input class="cardio-input" type="number" inputmode="decimal" placeholder="1.5" id="cardioMiles" value="${cf.miles||''}">
+      </div>
+      <div class="cardio-field">
+        <label>Incline %</label>
+        <input class="cardio-input" type="number" inputmode="numeric" placeholder="10" id="cardioIncline" value="${cf.incline||''}">
+      </div>
+    </div>
+    <button class="cardio-log-btn" id="logCardioBtn" data-day="${day}" data-week="${w}">+ Log Cardio Session</button>
+    ${logged.length>0?`<div style="margin-top:10px">
+      ${logged.map((c,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--border);font-size:12px;color:var(--text2)">
+        <span style="color:var(--blue)">🏃</span>
+        <span>${c.type||'Cardio'}</span>
+        <span>${c.minutes?c.minutes+' min':''}</span>
+        <span>${c.miles?c.miles+' mi':''}</span>
+        ${c.incline?`<span>${c.incline}% incline</span>`:''}
+        <button style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px" data-deletecardio="${STATE.cardioLogs.indexOf(c)}">✕</button>
+      </div>`).join('')}
+    </div>`:''}
+  </div>`;
+}
+
+function buildExCard(day, ex, idx, stage) {
+  const open = STATE.expandedEx[`${day}-${ex.id}`];
+  const done = isExDone(day, ex.id);
+  const pain = hasPain(day, ex.id);
+  const sets = STATE.sessionData[day]?.[ex.id] || [];
+  const progRec = done ? getProgRec(ex, sets, stage) : null;
+  return `<div class="ex-card">
+    <div class="ex-header" data-toggle="${day}|${ex.id}">
+      <div class="ex-num">${idx+1}</div>
+      <div class="ex-title">
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-meta">${ex.isCore?'3 × rotate':`${ex.sets} × ${ex.repRange[0]}${ex.repRange[0]!==ex.repRange[1]?'–'+ex.repRange[1]:''}`} · ${ex.type}</div>
+      </div>
+      <div class="ex-status">
+        ${pain?'<span style="font-size:12px;color:var(--danger)">⚡</span>':''}
+        ${done?'<span class="ex-done-badge">✓</span>':''}
+        ${progRec?'<span class="ex-prog-badge">↑</span>':''}
+      </div>
+      <div class="ex-chevron${open?' open':''}">▼</div>
+    </div>
+    ${open ? buildExBody(day, ex, sets, progRec, pain) : ''}
+  </div>`;
+}
+
+function buildExBody(day, ex, sets, progRec, pain) {
+  return `<div class="ex-body">
+    ${ex.safetyFlag?`<div class="safety-warn">${SAFETY[ex.safetyFlag]}</div>`:''}
+    ${pain?`<div class="pain-warn">🚨 Pain flagged. Consider: drop weight 20%, reduce ROM, or substitute temporarily.</div>`:''}
+    ${progRec?`<div class="prog-rec">↑ Progression: ${progRec}</div>`:''}
+    ${ex.isCore ? buildCoreBlock(day,ex) : buildSets(day,ex,sets)}
+    <div class="ex-info">
+      <div class="info-section">
+        <div class="info-label">Form Cues</div>
+        ${ex.cues.map(c=>`<div class="cue-item">${c}</div>`).join('')}
+      </div>
+      <div class="info-section">
+        <div class="info-label">Common Mistakes</div>
+        ${ex.mistakes.map(m=>`<div class="mistake-item">${m}</div>`).join('')}
+      </div>
+      <div class="info-section">
+        <div class="info-label">Video Reference</div>
+        <a class="video-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.video)}" target="_blank">▶ ${ex.video}</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildSets(day, ex, sets) {
+  const allFormGood = sets.length>0 && sets.every(s=>s.formGood===true);
+  const anyFormBad = sets.some(s=>s.formGood===false);
+  return `
+    <div class="set-header">
+      <div class="set-col-label">Set</div>
+      <div class="set-col-label">Weight</div>
+      <div class="set-col-label">Reps</div>
+      <div class="set-col-label">RIR</div>
+      <div class="set-col-label"></div>
+    </div>
+    ${sets.map((s,i)=>{
+      const done = s.reps!==''&&s.reps!==null&&s.reps!==undefined;
+      return `<div class="set-row${done?' s-done':''}${s.pain?' s-pain':''}">
+        <div class="set-num">${i+1}</div>
+        <input class="set-input" type="number" inputmode="decimal" placeholder="lbs" value="${s.weight??''}" data-set="${day}|${ex.id}|${i}|weight">
+        <input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="${s.reps??''}" data-set="${day}|${ex.id}|${i}|reps">
+        <div class="set-rpe">
+          ${[2,1,0].map(r=>`<button class="rpe-btn${s.rir===r?' sel':''}" data-rir="${day}|${ex.id}|${i}|${r}">${r}</button>`).join('')}
+        </div>
+        <button class="pain-btn${s.pain?' on':''}" data-pain="${day}|${ex.id}|${i}" title="Flag pain">⚡</button>
+      </div>`;
+    }).join('')}
+    <div class="ex-actions">
+      <button class="form-toggle${allFormGood?' good':anyFormBad?' bad':''}" data-form="${day}|${ex.id}">
+        ${allFormGood?'✓ Form Good':anyFormBad?'✕ Form Issues':'Mark Form Good'}
+      </button>
+    </div>`;
+}
+
+function buildCoreBlock(day, ex) {
+  return `<div class="core-options">
+    ${Object.entries(CORE_ROTATIONS).map(([cat,moves])=>`
+      <div class="core-cat-label">${cat}</div>
+      <div class="core-chips">
+        ${moves.map(m=>{
+          const key=`${day}-${ex.id}-${m}`;
+          return `<button class="core-chip${STATE.selectedCores[key]?' sel':''}" data-core="${key}">${m}</button>`;
+        }).join('')}
+      </div>`).join('')}
+  </div>`;
+}
+
+function buildHistory() {
+  const logs = Object.entries(STATE.logs).reverse();
+  const cardioLogs = [...(STATE.cardioLogs||[])].reverse();
+  if (!logs.length && !cardioLogs.length) return `<div class="empty-state"><div class="empty-icon">📋</div><div>No sessions logged yet.</div></div>`;
+  return `
+    <div class="section-title">Session History</div>
+    <div class="history-list">
+      ${logs.map(([key,sess])=>{
+        const d=new Date(sess.completedAt);
+        const ds=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+        const sessCardio=(STATE.cardioLogs||[]).filter(c=>c.sessionDay===sess.day&&c.sessionWeek===sess.week);
+        return `<div class="history-card">
+          <div class="history-date">${ds} · Week ${sess.week}</div>
+          <div class="history-name">${sess.day} — ${PROGRAM[sess.day]?.label||''}</div>
+          ${sess.notes?.bestLift?`<div style="margin-top:6px;font-size:12px;color:var(--text3)">Best: ${sess.notes.bestLift}</div>`:''}
+          <div class="history-chips">
+            ${(sess.topLifts||[]).slice(0,4).map(l=>`<span class="chip">${l.name.split(' ').pop()}: ${l.weight}lb</span>`).join('')}
+            ${sessCardio.map(c=>`<span class="chip cardio-chip">🏃 ${c.type||''} ${c.miles?c.miles+'mi':''} ${c.minutes?c.minutes+'min':''}</span>`).join('')}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function buildProgress() {
+  const KEY=[{id:'bench',n:'Bench Press'},{id:'ohp',n:'Overhead Press'},{id:'squat',n:'Back Squat'},{id:'trap_deadlift',n:'Trap Deadlift'}];
+  const allCardio = STATE.cardioLogs||[];
+  const weekCardio = getCardioThisWeek();
+  const totalMiles = cardioTotalMiles(allCardio);
+  const totalMins = cardioTotalMins(allCardio);
+  const weekMiles = cardioTotalMiles(weekCardio);
+  const weekMins = cardioTotalMins(weekCardio);
+
+  // Build per-week cardio miles for chart
+  const milesByWeek = {};
+  allCardio.forEach(c => {
+    const wk = c.sessionWeek || 1;
+    milesByWeek[wk] = (milesByWeek[wk]||0) + (parseFloat(c.miles)||0);
+  });
+  const weekKeys = Object.keys(milesByWeek).sort((a,b)=>a-b);
+  const maxWkMiles = Math.max(...Object.values(milesByWeek), 1);
+
+  return `
+    <div class="section-title">Cardio Stats</div>
+    <div class="cardio-stat-row">
+      <div class="cardio-stat"><div class="cardio-stat-label">This Week</div><div class="cardio-stat-val">${weekMiles.toFixed(1)}</div><div class="cardio-stat-sub">miles · ${weekMins} min</div></div>
+      <div class="cardio-stat"><div class="cardio-stat-label">All Time</div><div class="cardio-stat-val">${totalMiles.toFixed(1)}</div><div class="cardio-stat-sub">miles total</div></div>
+      <div class="cardio-stat"><div class="cardio-stat-label">Sessions</div><div class="cardio-stat-val">${allCardio.length}</div><div class="cardio-stat-sub">cardio logged</div></div>
+    </div>
+    ${weekKeys.length > 0 ? `
+    <div class="chart-card">
+      <div class="chart-title">Cardio Miles per Week</div>
+      <div class="chart-area">
+        ${weekKeys.map(wk=>`<div class="chart-bar-wrap"><div class="chart-bar blue-bar" style="height:${(milesByWeek[wk]/maxWkMiles)*100}%" title="Wk ${wk}: ${milesByWeek[wk].toFixed(1)}mi"></div></div>`).join('')}
+      </div>
+      <div class="chart-stat">${weekKeys.map(wk=>`Wk ${wk}: ${milesByWeek[wk].toFixed(1)}mi`).join(' · ')}</div>
+    </div>` : ''}
+
+    <div class="section-title">Lift Progress</div>
+    ${KEY.map(lift=>{
+      const pts=[];
+      Object.values(STATE.logs).forEach(sess=>{
+        const sets=sess.sets?.[lift.id];
+        if(sets){const mx=Math.max(...sets.map(s=>parseFloat(s.weight)||0));if(mx>0)pts.push(mx);}
+      });
+      const maxW=Math.max(...pts,1);
+      return `<div class="chart-card">
+        <div class="chart-title">${lift.n} — Top Weight Per Session</div>
+        ${pts.length===0?`<div class="chart-empty">No data yet</div>`:`
+          <div class="chart-area">
+            ${pts.map(w=>`<div class="chart-bar-wrap"><div class="chart-bar" style="height:${(w/maxW)*100}%"></div></div>`).join('')}
+          </div>
+          <div class="chart-stat">Current: <span style="color:var(--accent);font-weight:700">${pts[pts.length-1]} lb</span>${pts.length>1?` · +${pts[pts.length-1]-pts[0]} lb since start`:''}</div>`}
+      </div>`;
+    }).join('')}`;
+}
+
+function buildSettings() {
+  const w=STATE.currentWeek;
+  return `<div class="section-title">Program Settings</div>
+  <div class="settings-section">
+    <div class="setting-card">
+      <div class="setting-row">
+        <div class="setting-label">
+          <div class="setting-name">Current Week</div>
+          <div class="setting-desc">Adjusts phase and progression targets</div>
+        </div>
+        <div class="num-ctrl">
+          <button class="num-btn" id="wkDown">−</button>
+          <div class="num-val">${w}</div>
+          <button class="num-btn" id="wkUp">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="setting-card">
+      <div class="setting-name" style="margin-bottom:6px">Next Session</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:10px">App will auto-suggest: <span style="color:var(--accent);font-weight:600">${getNextDay()}</span></div>
+      <div style="font-size:11px;color:var(--text3)">This advances automatically each time you complete a workout. You can also start any day manually from the dashboard.</div>
+    </div>
+    <div class="setting-card">
+      <div class="setting-name" style="margin-bottom:10px">Phase Guide</div>
+      ${Object.entries(STAGES).map(([n,s])=>`
+        <div class="phase-row">
+          <div class="phase-dot" style="background:${s.color}"></div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">${s.label} (Phase ${n})</div>
+            <div style="font-size:11px;color:var(--text3)">${s.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="setting-card">
+      <div class="setting-name" style="margin-bottom:6px">Progression Rules</div>
+      <div class="prog-info">
+        <b>Barbell:</b> +5 lb when all sets hit top rep with good form<br>
+        <b>Dumbbell:</b> Move to next pair (+5 lb total)<br>
+        <b>Isolation/Cable:</b> Add reps first, then small weight jumps<br>
+        <b>Pullups:</b> Add reps, then add weight via belt
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── EVENTS ─────────────────────────────────────────────────────────────────
+function attachEvents() {
+  document.querySelectorAll('[data-tab]').forEach(el=>{
+    el.addEventListener('click',()=>{ STATE.tab=el.dataset.tab; if(el.dataset.tab!=='workout') STATE.activeDay=null; save(); render(); });
+  });
+  document.querySelectorAll('[data-startday]').forEach(el=>{
+    el.addEventListener('click',()=>{ STATE.activeDay=el.dataset.startday; ensureSession(el.dataset.startday); save(); render(); });
+  });
+  const backBtn=document.getElementById('backBtn');
+  if(backBtn) backBtn.addEventListener('click',()=>{ STATE.activeDay=null; save(); render(); });
+
+  document.querySelectorAll('[data-toggle]').forEach(el=>{
+    el.addEventListener('click',()=>{ const k=el.dataset.toggle; STATE.expandedEx[k]=!STATE.expandedEx[k]; save(); render(); });
+  });
+
+  document.querySelectorAll('[data-cardiotoggle]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      if(!STATE.expandedCardio) STATE.expandedCardio={};
+      const k=el.dataset.cardiotoggle;
+      STATE.expandedCardio[k]=!STATE.expandedCardio[k];
+      save(); render();
+    });
+  });
+
+  document.querySelectorAll('[data-set]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      const [day,exId,i,field]=el.dataset.set.split('|');
+      if(!STATE.sessionData[day]) ensureSession(day);
+      if(!STATE.sessionData[day][exId]){
+        const ex=PROGRAM[day].exercises.find(e=>e.id===exId);
+        STATE.sessionData[day][exId]=initSets(ex);
+      }
+      STATE.sessionData[day][exId][parseInt(i)][field]=el.value;
+      save(); render();
+    });
+  });
+
+  document.querySelectorAll('[data-rir]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const [day,exId,i,r]=el.dataset.rir.split('|');
+      const sets=STATE.sessionData[day][exId];
+      const cur=sets[parseInt(i)].rir;
+      sets[parseInt(i)].rir=cur===parseInt(r)?null:parseInt(r);
+      save(); render();
+    });
+  });
+
+  document.querySelectorAll('[data-pain]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const [day,exId,i]=el.dataset.pain.split('|');
+      STATE.sessionData[day][exId][parseInt(i)].pain=!STATE.sessionData[day][exId][parseInt(i)].pain;
+      save(); render();
+    });
+  });
+
+  document.querySelectorAll('[data-form]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const [day,exId]=el.dataset.form.split('|');
+      const sets=STATE.sessionData[day][exId];
+      const allGood=sets.every(s=>s.formGood===true);
+      sets.forEach(s=>s.formGood=!allGood);
+      save(); render();
+    });
+  });
+
+  document.querySelectorAll('[data-core]').forEach(el=>{
+    el.addEventListener('click',()=>{ const k=el.dataset.core; STATE.selectedCores[k]=!STATE.selectedCores[k]; save(); render(); });
+  });
+
+  document.querySelectorAll('[data-notekey]').forEach(el=>{
+    el.addEventListener('input',()=>{
+      const day=el.dataset.noteday,key=el.dataset.notekey;
+      if(!STATE.sessionNotes[day]) STATE.sessionNotes[day]={};
+      STATE.sessionNotes[day][key]=el.value;
+      save();
+    });
+  });
+
+  // Cardio type select
+  document.querySelectorAll('[data-cardiotype]').forEach(el=>{
+    el.addEventListener('click',()=>{ CARDIO_FORM.type=el.dataset.cardiotype; render(); });
+  });
+
+  // Cardio input sync (keep values while open)
+  ['cardioMins','cardioMiles','cardioIncline'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.addEventListener('input',()=>{
+      if(id==='cardioMins') CARDIO_FORM.minutes=el.value;
+      if(id==='cardioMiles') CARDIO_FORM.miles=el.value;
+      if(id==='cardioIncline') CARDIO_FORM.incline=el.value;
+    });
+  });
+
+  // Log cardio
+  const logBtn=document.getElementById('logCardioBtn');
+  if(logBtn){
+    logBtn.addEventListener('click',()=>{
+      const day=logBtn.dataset.day;
+      const week=parseInt(logBtn.dataset.week);
+      if(!STATE.cardioLogs) STATE.cardioLogs=[];
+      STATE.cardioLogs.push({
+        date: new Date().toISOString(),
+        sessionDay: day,
+        sessionWeek: week,
+        type: CARDIO_FORM.type||'Cardio',
+        minutes: CARDIO_FORM.minutes||'',
+        miles: CARDIO_FORM.miles||'',
+        incline: CARDIO_FORM.incline||''
+      });
+      CARDIO_FORM={};
+      save(); render();
+    });
+  }
+
+  // Delete cardio
+  document.querySelectorAll('[data-deletecardio]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const idx=parseInt(el.dataset.deletecardio);
+      STATE.cardioLogs.splice(idx,1);
+      save(); render();
+    });
+  });
+
+  // Complete workout
+  const completeBtn=document.getElementById('completeBtn');
+  if(completeBtn){
+    completeBtn.addEventListener('click',()=>{
+      const day=completeBtn.dataset.day;
+      const topLifts=[];
+      PROGRAM[day].exercises.forEach(ex=>{
+        const sets=STATE.sessionData[day]?.[ex.id];
+        if(sets){
+          const mx=Math.max(...sets.map(s=>parseFloat(s.weight)||0));
+          if(mx>0) topLifts.push({name:ex.name,weight:mx,reps:sets[0]?.reps});
+        }
+      });
+      const key=`W${STATE.currentWeek}-${day}`;
+      STATE.logs[key]={
+        day,week:STATE.currentWeek,
+        sets:JSON.parse(JSON.stringify(STATE.sessionData[day]||{})),
+        notes:JSON.parse(JSON.stringify(STATE.sessionNotes[day]||{})),
+        completedAt:new Date().toISOString(),
+        topLifts
+      };
+      // Advance the next-day pointer
+      STATE.lastCompletedDayIndex = DAY_ORDER.indexOf(day);
+      completeBtn.textContent='✓ Workout Saved!';
+      completeBtn.classList.add('saved');
+      save();
+      setTimeout(()=>{ STATE.activeDay=null; save(); render(); },1500);
+    });
+  }
+
+  const wkUp=document.getElementById('wkUp');
+  const wkDown=document.getElementById('wkDown');
+  if(wkUp) wkUp.addEventListener('click',()=>{ STATE.currentWeek=Math.min(12,STATE.currentWeek+1); save(); render(); });
+  if(wkDown) wkDown.addEventListener('click',()=>{ STATE.currentWeek=Math.max(1,STATE.currentWeek-1); save(); render(); });
+}
+
+render();
+</script>
+</body>
+</html>
